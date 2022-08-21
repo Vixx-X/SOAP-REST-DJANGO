@@ -6,21 +6,16 @@ Installation tested on Ubuntu 20.04.1 LTS.
 
 ## Table of contents
 
-- [dev enviroments](#dev-env)
-  - [virtualenv](#virtualenv)
-    - [Install pre-installation dependencies](#install-pre-installation-dependencies)
-    - [Setup postgreSQL (database)](#setup-postgresql-database)
-      - [Create .env file](#create-env)
-      - [Setup dev enviroment](#setup-dev-env)
-      - [Setup de Database and start the project](#create-a-database-and-database-user-for-development)
-      - [Create and activate virtual enviroment and install python dependencies](#create-a-virtual-enviroment)
-    - [API documentation](#api-docs)
-    - [Testing](#testing)
+- [Install pre-installation dependencies](#install-pre-installation-dependencies)
+- [Create .env file](#create-env)
+- [Setup dev enviroment](#setup-dev-env)
+- [Create and activate virtual enviroment and install python dependencies](#setup-venv)
+- [Setup de Database](#setup-db)
+- [Start the server](#start-server)
+- [Testing](#test)
 - [References](#references)
 
-## Dev enviroments <a name="dev-env"></a>
-
-### Virtual env <a name="virtualenv"></a>
+## Steps by Virtual env <a name="virtualenv"></a>
 
 This method is tested to work on linux, and is the most confortable for developing, because is faster in dev time, but need some pre working to start the enviroments
 
@@ -33,13 +28,23 @@ This method is tested to work on linux, and is the most confortable for developi
   Installation on Ubuntu
   `sudo apt install python3-venv python3-pip`
 
-### Setup postgreSQL (database) <a name="setup-postgresql-database"></a>
+- Postgres
+  If done with docker this work with example settings
+  `docker run --name postgres -e POSTGRES_PASSWORD=1234 -p 5432:5432 -d postgres`
+  `sudo apt-get install libpq-dev` (needed by psycopg2)
 
-`sudo apt-get install libpq-dev postgresql-12`
+  You can also try to install it normally
+  `sudo apt-get install libpq-dev postgresql-12`
 
 ### Create .env file <a name="create-env"></a>
 
 Edit `.env.example` with your own settings and rename it `.env`
+For the SECRET_KEY, one can generate it using `django shell`:
+
+```python
+from django.core.management.utils import get_random_secret_key
+get_random_secret_key()
+```
 
 ### Setup dev enviroment <a name="setup-dev-env"></a>
 
@@ -47,25 +52,27 @@ Edit `.env.example` with your own settings and rename it `.env`
 source ./scripts/start.sh
 ```
 
-#### Create and activate virtual enviroment and install python dependencies <a name="create-a-virtual-enviroment"></a>
+### Create and activate virtual enviroment and install python dependencies <a name="setup-venv"></a>
 
 ```bash
 setup_venv
 ```
 
-#### Setup de Database and start the project <a name="create-a-database-and-database-user-for-development"></a>
+### Setup de Database and migrate tables <a name="setup-db"></a>
 
 ```bash
 setup_db
 ```
 
-#### Test the setup <a name="test-the-setup"></a>
+### Start the server <a name="start-server"></a>
 
-Test the setup by running the development server
+Run the development server
 
 ```bash
 runserver
 ```
+
+### Test the setup <a name="test"></a>
 
 ## References <a name="references"></a>
 
