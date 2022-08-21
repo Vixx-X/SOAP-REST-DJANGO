@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import TemplateView
+
+class RootView(TemplateView):
+    template_name = "root.html"
 
 urlpatterns = [
     # admin
@@ -30,5 +34,10 @@ urlpatterns = [
     path(
         "soap/",
         include(("project.apps.soap.urls", "project.apps.soap")),
+    ),
+    # root
+    path(
+        "",
+        RootView.as_view(),
     ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

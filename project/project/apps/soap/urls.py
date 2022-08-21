@@ -4,5 +4,5 @@ from django.urls.conf import path
 from . import views
 
 urlpatterns = [
-    path("tasks/", DjangoView.as_view(application=views.app)),
+    path("", DjangoView.as_view(application=views.app)),
 ]

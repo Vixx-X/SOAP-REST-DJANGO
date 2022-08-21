@@ -82,7 +82,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            str(BASE_DIR / "templates"),
+            str(BASE_DIR / "project" / "templates"),
         ],
         "OPTIONS": {
             "context_processors": [
@@ -105,6 +105,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "project.wsgi.application"
+
+
+# Site Config
+SITE_ID = int(env("SITE_ID", default="1"))
 
 
 # Database
@@ -142,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_URL = "static/"
-STATIC_ROOT = str(BASE_DIR / "../static")
+STATIC_ROOT = str(BASE_DIR / "static")
 
 
 # Default primary key field type

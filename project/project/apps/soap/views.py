@@ -1,9 +1,8 @@
-from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
 from spyne.error import ResourceNotFoundError, ResourceAlreadyExistsError
+from spyne.model.complex import Iterable
 from spyne.model.primitive import Integer
-from spyne.service import Service
 from spyne.protocol.soap import Soap11
 from spyne.application import Application
 from spyne.decorator import rpc
@@ -14,13 +13,22 @@ from project.apps.todo.models import Task as TaskModel
 from .serializers import Task
 
 
-class TaskService(Service):
+class TaskService(DjangoService):
+    """
+    Service for tasks handling
+    """
+
+    @rpc(Integer, Integer, _returns=Iterable(Task))
+    def list_task(ctx, limit, offset):
+        limit, offset = limit or 20, offset or 0 # default
+        return TaskModel.objects.all()[offset: offset + limit]
+
     @rpc(Integer, _returns=Task)
     def get_task(ctx, pk):
         try:
             return TaskModel.objects.get(pk=pk)
         except TaskModel.DoesNotExist:
-            raise ResourceNotFoundError("Task")
+            raise ResourceNotFoundError("task")
 
     @rpc(Task, _returns=Task)
     def create_task(ctx, task):
@@ -29,25 +37,13 @@ class TaskService(Service):
         except IntegrityError:
             raise ResourceAlreadyExistsError("Task")
 
-
-class ExceptionHandlingService(DjangoService):
-    """
-    Service for testing exception handling
-    """
-
-    @rpc(_returns=Task)
-    def raise_does_not_exist(ctx):
-        return TaskModel.objects.get(pk=-1)
-
-    @rpc(_returns=Task)
-    def raise_validation_error(ctx):
-        raise ValidationError(None, "Invalid.")
-
+    @rpc(Task, _returns=Task)
+    def update_task(ctx, task):
+        return TaskModel.objects.filter(pk=task.pk).update(**task.as_dict())
 
 app = Application(
     [
         TaskService,
-        ExceptionHandlingService,
     ],
     "project.app.soap",
     in_protocol=Soap11(validator="lxml"),
