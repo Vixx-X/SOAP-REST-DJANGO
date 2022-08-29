@@ -30,7 +30,9 @@ This method is tested to work on linux, and is the most confortable for developi
 
 - Postgres
   If done with docker this work with example settings
+  
   `docker run --name postgres -e POSTGRES_PASSWORD=1234 -p 5432:5432 -d postgres`
+  
   `sudo apt-get install libpq-dev` (needed by psycopg2)
 
   You can also try to install it normally
