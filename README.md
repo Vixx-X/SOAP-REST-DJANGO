@@ -39,12 +39,6 @@ This method is tested to work on linux, and is the most confortable for developi
 ### Create .env file <a name="create-env"></a>
 
 Edit `.env.example` with your own settings and rename it `.env`
-For the SECRET_KEY, one can generate it using `django shell`:
-
-```python
-from django.core.management.utils import get_random_secret_key
-get_random_secret_key()
-```
 
 ### Setup dev enviroment <a name="setup-dev-env"></a>
 
